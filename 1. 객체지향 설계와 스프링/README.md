@@ -46,7 +46,7 @@
   MemberRepo m = new MemoryMemberRepo();  // 기존 코드
   MemberRepo m = new JdbcMemberRepo();  // 변경 코드
   ```
-  - 다형성을 사용하지만 OCP 원칙을 지킬 수 없다.
+  > 다형성을 사용하지만 OCP 원칙을 지킬 수 없다.
   
 #### LSP 리스코프 치환 원칙 (Liskov substitution principle)
   - 프로그램의 객체는 프로그램의 정확성을 
@@ -70,7 +70,7 @@
   MemberRepo m = new MemoryMemberRepo();  // DIP 위반
   ```
 
-#### 정리 : 다형성 만으로는 OCP, DIP 를 지킬 수 없음.
+> 정리 : 다형성 만으로는 OCP, DIP 를 지킬 수 없음.
 
 ---
 ### 객체 지향 설계와 스프링
