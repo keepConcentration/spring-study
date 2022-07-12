@@ -34,7 +34,7 @@
 
 #### SRP 단일 책임 원칙 (Single responsibility principle)
   - 하나의 클래스는 하나의 책임만 가져야 한다.
-  - 변경이 있을 때 파븍효과가 적으면 단일 책임 원칙을 잘 
+  - 변경이 있을 때 파급효과가 적으면 단일 책임 원칙을 잘 
   따른 것(ex: UI변경, 객체 생성 및 사용을 분리)
 
 #### OCP 개방-폐쇄 원칙 (Open/closed principle)
