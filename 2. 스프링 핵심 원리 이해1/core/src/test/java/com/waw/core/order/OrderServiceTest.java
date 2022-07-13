@@ -1,17 +1,25 @@
 package com.waw.core.order;
 
+import com.waw.core.AppConfig;
 import com.waw.core.member.Grade;
 import com.waw.core.member.Member;
 import com.waw.core.member.MemberService;
 import com.waw.core.member.MemberServiceImpl;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class OrderServiceTest {
 
-    MemberService memberService = new MemberServiceImpl();
-    OrderService orderService = new OrderServiceImpl();
+    MemberService memberService;
+    OrderService orderService;
 
+    @BeforeEach
+    public void beforeEach() {
+        AppConfig appConfig = new AppConfig();
+        memberService = appConfig.memberService();
+        orderService = appConfig.orderService();
+    }
     @Test
     void createOrder() {
         Long memberId = 1L;
