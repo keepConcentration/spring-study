@@ -2,7 +2,9 @@ package com.waw.core.discount;
 
 import com.waw.core.member.Grade;
 import com.waw.core.member.Member;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RateDiscountPolicy implements DiscountPolicy {
 
     private int discountPercent = 10;
