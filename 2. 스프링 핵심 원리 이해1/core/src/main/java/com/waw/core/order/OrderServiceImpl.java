@@ -9,11 +9,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderServiceImpl implements OrderService {
 
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
 
-    @Autowired
+    private DiscountPolicy discountPolicy;
+
+
+    //@Autowired
+    // 생성자가 하나만 있으면 @Autowired 생략 가능
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        System.out.println("1. OrderServiceImpl.OrderServiceImpl");
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
@@ -29,5 +33,13 @@ public class OrderServiceImpl implements OrderService {
     // 테스트
     public MemberRepository getMemberRepository() {
         return memberRepository;
+    }
+
+    // 일반메소드 주입
+    // 생성자, 수정자 주입을 사용함, 이건 잘 안사용함.
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
     }
 }

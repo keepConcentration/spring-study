@@ -8,6 +8,7 @@ import com.waw.core.member.MemberServiceImpl;
 import com.waw.core.member.MemoryMemberRepository;
 import com.waw.core.order.OrderService;
 import com.waw.core.order.OrderServiceImpl;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,10 +28,12 @@ public class AppConfig {
     @Bean
     public OrderService orderService() {
         System.out.println("call AppConfig.orderService");
-        return new OrderServiceImpl(memberRepository(), discountPolicy());
+        //return new OrderServiceImpl(memberRepository(), discountPolicy());
+        return null;
     }
     @Bean
     public DiscountPolicy discountPolicy() {
         return new RateDiscountPolicy();
     }
+
 }
