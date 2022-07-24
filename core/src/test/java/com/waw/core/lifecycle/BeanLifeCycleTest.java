@@ -21,8 +21,11 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig {
 
+
+
         // destroyMethod 기본값 = "(inffered)" (추론) 기본값일 경우 shutdown, close 메소드를 자동 호출한다
-        @Bean(initMethod = "init", destroyMethod = "close")
+       // @Bean(initMethod = "init", destroyMethod = "close")
+        @Bean
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
