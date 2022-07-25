@@ -1,19 +1,17 @@
 package com.waw.core.scope;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Provider;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class SingletonWithPrototypeTest1 {
+public class SingletonWithPrototypeTest2 {
 
     @Test
     void prototypeFind() {
@@ -44,19 +42,18 @@ public class SingletonWithPrototypeTest1 {
     @Scope("singleton")
     static class ClientBean {
 
-        // ObjectProvider extends ObjectFactory > Provider는 여러 기능 추가
-        // 하지만 스프링에 의존적임
-        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
-        //private ObjectFactory<PrototypeBean> prototypeBeanProvider;
+        // javax.inject.Provider
+        // 딱 DL 기능만 제공한다. but 라이브러리 추가 필요
+        // 순환 참조 문제가 발생하지 않음.
+        // (eg: A클래스에서 B를 참조, B클래스에서 A를 참조할 때 순환 참조)
+        private Provider<PrototypeBean> prototypeBeanProvider;
 
-        public ClientBean(ObjectProvider<PrototypeBean> prototypeBeanProvider) {
+        public ClientBean(Provider<PrototypeBean> prototypeBeanProvider) {
             this.prototypeBeanProvider = prototypeBeanProvider;
         }
 
         public int logic() {
-            // Dependency Lookup(DL)
-            // getObject: 컨테이너로 직접 조회가 아닌 대신 찾아주는 기능
-            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+            PrototypeBean prototypeBean = prototypeBeanProvider.get();
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
