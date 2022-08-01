@@ -261,9 +261,9 @@ https://www.google.com:443/search?q=hello&hl=ko
 
 ### URL scheme
 
-**scheme**://[userinfo@]host[:port][/path][?query][#fragment]
+**scheme** ://[userinfo@]host[:port][/path][?query][#fragment]
 
-**https**://www.google.com:443/search?q=hello&hl=ko
+**https** ://www.google.com:443/search?q=hello&hl=ko
 
 - 주로 프로토콜(https) 사용
 - 프로토콜: 어떤 방식으로 자원에 접근할 것인가 하는 약속 규칙
@@ -273,7 +273,7 @@ https://www.google.com:443/search?q=hello&hl=ko
 
 ### URL userinfo
 
-scheme://**[userinfo@]** host[:port][/path][?query][#fragment]
+scheme:// **[userinfo@]** host[:port][/path][?query][#fragment]
 
 https://www.google.com:443/search?q=hello&hl=ko
 
@@ -282,18 +282,18 @@ https://www.google.com:443/search?q=hello&hl=ko
 
 ### URL host
 
-scheme://[userinfo@]**host**[:port][/path][?query][#fragment]
+scheme://[userinfo@] **host** [:port][/path][?query][#fragment]
 
-https://**www.google.com**:443/search?q=hello&hl=ko
+https:// **www.google.com** :443/search?q=hello&hl=ko
 
 - 호스트명
 - 도메인명 또는 IP주소를 직접 사용 가능
 
 ### URL port
 
-scheme://[userinfo@]host**₩[:port]**[/path][?query][#fragment]
+scheme://[userinfo@]host **[:port]** [/path][?query][#fragment]
 
-https://www.google.com **:443**/search?q=hello&hl=ko
+https://www.google.com **:443** /search?q=hello&hl=ko
 
 - 포트(PORT)
 - 접속 포트
@@ -301,9 +301,9 @@ https://www.google.com **:443**/search?q=hello&hl=ko
 
 ### URL port
 
-scheme://[userinfo@]host[:port]**[/path]**[?query][#fragment]
+scheme://[userinfo@]host[:port] **[/path]** [?query][#fragment]
 
-https://www.google.com:443/**search**?q=hello&hl=ko
+https://www.google.com:443/ **search** ?q=hello&hl=ko
 
 - 리소스 경로(path), 계층적 구조
 - ex)
@@ -313,7 +313,7 @@ https://www.google.com:443/**search**?q=hello&hl=ko
 
 ### URL query
 
-scheme://[userinfo@]host[:port][/path]**[?query]**[#fragment]
+scheme://[userinfo@]host[:port][/path] **[?query]** [#fragment]
 
 https://www.google.com:443/search **?q=hello&hl=ko**
 
@@ -324,7 +324,7 @@ https://www.google.com:443/search **?q=hello&hl=ko**
 
 ### URL query
 
-scheme://[userinfo@]host[:port][/path][?query]**[#fragment]**
+scheme://[userinfo@]host[:port][/path][?query] **[#fragment]**
 
 https://dos.spring.io/spring-boot/docs/current/reference/html/getting-started.html **#getting-started-introducing-spring-boot**
 
