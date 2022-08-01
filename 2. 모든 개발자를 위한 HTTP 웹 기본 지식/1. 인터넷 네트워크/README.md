@@ -299,7 +299,7 @@ https://www.google.com **:443** /search?q=hello&hl=ko
 - 접속 포트
 - 일반적으로 생략, 생략 시 http는 80, https는 443
 
-### URL port
+### URL path
 
 scheme://[userinfo@]host[:port] **[/path]** [?query][#fragment]
 
@@ -322,7 +322,7 @@ https://www.google.com:443/search **?q=hello&hl=ko**
 - query parameter, query string 등으로 불림
 - 웹 서버에 제공하는 파라미터, 문자 형태
 
-### URL query
+### URL fregment
 
 scheme://[userinfo@]host[:port][/path][?query] **[#fragment]**
 
