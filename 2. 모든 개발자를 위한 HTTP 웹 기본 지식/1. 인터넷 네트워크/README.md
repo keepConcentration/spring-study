@@ -330,3 +330,31 @@ https://dos.spring.io/spring-boot/docs/current/reference/html/getting-started.ht
 
 - html 내부 북마크 등에 사용
 - 서버에 전송하는 정보 아님
+
+## 웹 브라우저 요청 흐름
+
+> https://www.google.com:443/search?q=hello&hl=ko
+
+1. 웹 브라우저 요청
+2. DNS 서버 조회
+3. HTTP 요청 메세지 생성
+  - ex) GET /search?q=hello&hl=ko HTTP/1.1 Host: www.google.com
+
+4. SOCKET 라이브러리를 통해 OS 계층에 전달
+  - TCP/IP 연결
+  - 데이터 전달
+
+5. OS 계층에서 HTTP 메세지를 포함한 TCP/IP 패킷 생성
+6. 패킷 전송
+7. 패킷 응답
+  - HTTP 응답 메세지 ex)
+  
+  HTTP/1.1 200 OK
+  
+  Content-Type: text/html;charset-UTF-8
+
+  Content-length:3423
+
+  \<html>
+    \<body>...\</body>
+  \</html>
