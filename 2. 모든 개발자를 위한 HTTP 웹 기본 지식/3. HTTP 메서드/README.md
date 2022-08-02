@@ -187,3 +187,63 @@ Location: /members/100
 - **3. 다른 메서드로 처리하기 애매한 경우
   - ex) JSON으로 조회 데이터를 넘겨야 하는데, GET 메서드를 사용하기 어려운 경우(GET 에선 query string을 사용)
   - 애매하면 POST
+
+### PUT
+```
+PUT /members/100 HTTP/1.1
+Content-Type: appliation/json
+
+{
+  "username": "hello",
+  "age": 20
+}
+```
+- **리소스를 대체**
+  - 리소스가 있으면 대체
+  - 리소스가 없으면 생성
+  - 쉽게 이야기해서 덮어버림(merge, paste)
+- **중요! 클라이언트가 리소스를 식별**
+  - 클라이언트가 리소스의 위치를 알고 URI 지정(/members/**100**)
+  - POST와 차이점
+
+#### 리소스가 있는 경우
+
+- 클라이언트 요청 메세지(request)
+```
+PUT /members/100 HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "old",
+  "age": 50
+}
+```
+
+- 서버에서 있는 기존 데이터
+```
+{
+  "username": "young",
+  "age": 20
+}
+```
+
+- 데이터 대체
+```
+{
+  "username": "old",
+  "age": 50
+}
+```
+
+- 응답 메세지(response)
+```
+HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Length: 34
+Location: /members/100
+
+{
+  "username": "hello",
+  "age": 20
+}
+```
