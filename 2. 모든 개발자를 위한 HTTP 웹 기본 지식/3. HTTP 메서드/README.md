@@ -235,15 +235,147 @@ Content-Type: application/json
 }
 ```
 
-- 응답 메세지(response)
+
+#### 리소스가 없는 경우
+
+- 클라이언트 요청 메세지(request)
 ```
-HTTP/1.1 201 Created
+PUT /members/100 HTTP/1.1
 Content-Type: application/json
-Content-Length: 34
-Location: /members/100
 
 {
-  "username": "hello",
+  "username": "old",
+  "age": 50
+}
+```
+
+
+- 신규 리소스 생성
+```
+{
+  "username": "old",
+  "age": 50
+}
+```
+
+#### 주의! 리소스를 완전히 대체한다.
+
+- 클라이언트 요청 메세지(request)
+```
+PUT /members/100 HTTP/1.1
+Content-Type: application/json
+
+{
+  "age": 50
+}
+```
+
+- 서버에서 있는 기존 데이터
+```
+{
+  "username": "young",
   "age": 20
 }
 ```
+
+- 데이터 대체
+```
+{
+  "age": 50
+}
+```
+
+### PATCH
+```
+PATCH /members/100 HTTP/1.1
+Content-Type: application/json
+
+{
+  "age": 50
+}
+```
+- 리소스 부분 변경
+- PATCH가 지원되지 않는 서버도 있음. 그런 경우 POST 사용
+
+#### 리소스 부분 변경
+```
+PATCH /members/100 HTTP/1.1
+Content-Type: application/json
+
+{
+  "age": 50
+}
+```
+
+- 서버에서 있는 기존 데이터
+```
+{
+  "username": "young",
+  "age": 20
+}
+```
+
+- 데이터 부분 변경
+```
+{
+  "username": "young",
+  "age": 50
+}
+```
+
+### DELETE
+```
+DELETE /members/100 HTTP/1.1
+Host: localhost:8080
+
+```
+- 리소스 제거
+
+
+#### 리소스 제거
+```
+Delete /members/100 HTTP/1.1
+Host: localhost:8080
+
+```
+
+- 서버에서 있는 기존 데이터
+```
+{
+  "username": "young",
+  "age": 20
+}
+```
+
+- member 100 리소스 제거 리소스 제거
+
+## HTTP 메서드의 속성
+- 안전(Safe Methods)
+- 멱등(Itempotent Methods)
+- 캐시 가능(Cacheable Methods)
+
+### 안전 
+- 여러 번 호출해도 리소스를 변경하지 않는다.
+- 여러 번 호출 시 로그가 쌓이는 것은 고려하지 않음. 안전에 대해선 해당 리소스 변경 여부만 고려함.
+
+### 멱등
+- *f(f(x)) = f(x)*
+- 한 번 호출하든, 두 번 호출하든 100번 호출하든 해당 리소스의 결과가 같다.
+- 멱등 메서드
+  - **GET**: 해당 리소스의 항상 같은 결과가 조회된다.
+  - **PUT**: 해당 리소스의 최종 대체된 결과는 같다.
+  - **DELETE**: 해당 리소스의 삭제된 결과는 같다.
+
+- **POST**: 멱등이 아니다. 두 번 호출하면 같은 결제가 중복해서 발생할 수 있다.
+- **멱등은 재요청 중간에 리소스가 변경되는 것은 고려하지 않음.**
+  - ex) GET 호출 > PUT 호출 > GET 호출
+
+#### 멱등 활용
+- 자동 복구 메커니즘
+- 서버가 TIMEOUT 등으로 정상 응답을 못 주었을 때, 클라이언트가 같은 요청을 다시 해도 되는가에 대한 판단 근거
+
+### 캐시 가능
+- 응답 결과 리소스를 캐시해서 사용해도 되는가?
+- GET, HEAD, POST, PATCH 캐시 가능
+- 실제로는 GET, HEAD 정도만 캐시로 사용
+  - POST, PATCH는 본문 내용까지 캐시 키로 고려해야하는데, 구현이 쉽지 않음.
