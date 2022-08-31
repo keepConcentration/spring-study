@@ -102,3 +102,52 @@
 - 바이트 단위
 - Transfer-Encoding(전송 코딩)을 사용하면 Content-Length를 사용하면 안됨
 
+
+---
+
+# 협상(콘텐츠 네고시에이션)
+## 클라이언트가 선호하는 표현 요청
+
+- Accept: 클라이언트가 선호하는 미디어 타입 전달
+- Accept-Charset: 클라이언트가 선호하는 문자 인코딩
+- Accept-Encoding: 클라이언트가 선호하는 압축 인코딩
+- Accept-Language: 클라이언트가 선호하는 자연 언어
+- 협상 헤더는 요청 시에만 사용
+
+## Accept-Language 적용 전
+
+- 한국어를 지원하는 외국 사이트에 `GET /event` 요청
+- `Content-Language: en hello` 응답
+
+## Accept-Language 적용 후
+
+- 한국어를 지원하는 외국 사이트에 `GET /event Accept-Language: ko` 요청
+- `Content-Language: ko 안녕하세요` 응답
+
+## Accept-Language 적용 후
+
+- 독일어, 영어를 지원하는 외국 사이트에 `GET /event Accept-Language: ko` 요청
+- `Content-Language: de hallo` 응답
+
+
+## 협상과 우선 순위1
+### Quality Values(q)
+
+```
+GET /event
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+```
+
+- Quality Values(q) 사용
+- 0~1 사이 값을 지정할 수 있음. **클 수록 높은 우선 순위**
+- 생략하면 1
+- Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+  - 1. ko-KR;q=1 (q생략)
+  - 2. ko;q=0.9
+  - 3. en-US;q=0.8
+  - 4. en;q=0.7
+
+## Accept-Language 우선순위 적용 후
+
+- 독일어, 영어를 지원하는 외국 사이트에 `GET /event Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7` 요청
+- `Content-Language: en hallo` 응답
