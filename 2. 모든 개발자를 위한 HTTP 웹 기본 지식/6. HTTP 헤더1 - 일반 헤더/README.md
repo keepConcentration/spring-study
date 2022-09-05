@@ -151,3 +151,69 @@ Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
 
 - 독일어, 영어를 지원하는 외국 사이트에 `GET /event Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7` 요청
 - `Content-Language: en hallo` 응답
+
+## 전송방식
+
+- Transfer-Encoding
+- Range, Content-Range
+
+## 전송 방식 설명
+
+- 단순 전송
+- 압축 전송
+- 분할 전송
+- 범위 전송
+
+## 단순 전송
+
+### Content-Length
+
+- 컨텐츠의 길이
+
+### Content-Encoding
+
+- Content-Encoding: zgip
+
+## 분할 전송
+
+### Trnasfer-Encoding
+
+- Transfer-Encoding: chunked
+  - chunked: 덩어리
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Transfer-Encoding: chunked
+
+5
+Hello
+5
+World
+0
+\r\n
+```
+
+- Hello > World > \r\n 을 나눠서 전송
+- **분할 전송 시 Content-Length를 사용하면 안 됨**
+
+## 범위 전송
+
+### Range, Content-Range
+
+```
+GET /event
+Range: byte=1001-2000
+
+```
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Range: 1001-2000 / 2000
+
+helloworldhelloworld...
+```
+
+- 범위를 지정해서 요청 가능
+- 서버에선 해당 범위 맞는 byte 전송
