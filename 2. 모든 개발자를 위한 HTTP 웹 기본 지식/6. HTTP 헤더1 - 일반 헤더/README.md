@@ -339,3 +339,139 @@ Host: www.google.com
 - 리소스 접근 시 필요한 인증 벙법 정의
 - 401 Unauthrized 응답과 함께 사용
 - WWW-Authenticate: Newauth realm="apps", type=1 title="Login to \"apps\"", Basic realm= "simple"
+
+
+## 쿠키
+
+- Set-Cookie: 서버에서 클라이언트로 쿠키 전달(응답)
+- Cookie: 클라이언트가 서버에서 받은 쿠키를 저장하고 HTTP 요청 시 서버로 전달
+
+### 쿠키 미사용 시
+
+- 처음 welcome 페이지 접근
+```
+GET /welcome HTTP/1.1
+
+```
+```
+HTTP/1.1 200 OK
+
+안녕하세요. 손님
+```
+
+- 로그인
+```
+POST /login HTTP/1.1
+user=홍길동
+```
+```
+HTTP/1.1 200 OK
+
+홍길동님이 로그인했습니다.
+```
+
+- 로그인 이후 welcome 페이지 접근
+```
+GET /welcome HTTP/1.1
+
+```
+```
+HTTP/1.1 200 OK
+
+안녕하세요. 손님
+```
+
+> 홍길동이 보낸 요청인지 확인할 수 없음.
+
+- HTTP는 무상태(Stateless) 프로토콜이다.
+- 클라이언트와 서버가 요청과 응답을 주고 받으면 연결이 끊어진다.
+- 클라이언트가 다시 요청하면 서버는 이전 요청을 기억하지 못한다.
+- 클라이언트와 서버는 서로 상태를 유지하지 않는다.
+
+## 쿠키
+
+### 로그인
+
+- 로그인
+```
+POST /login HTTP/1.1
+user=홍길동
+```
+```
+HTTP/1.1 200 OK
+Set-Cookie: user=홍길동
+
+홍길동님이 로그인했습니다.
+```
+웹 브라우저에는 쿠키 저장소가 존재한다.
+응답으로 받은 Cookie(user=홍길동)fmf 웹 브라우저 쿠키 저장소에 저장한다.
+
+- 로그인 이후 welcome 페이지 접근
+
+```
+GET /welcome HTTP/1.1
+Cookie: user=홍길동
+```
+```
+HTTP/1.1 200 OK
+
+안녕하세요. 홍길동님
+```
+
+**웹 브라우저는 자동으로 웹 서버에 요청할 때마다 쿠키를 항상 꺼내 HTTP Header를 추가해서 요청한다.**
+
+쿠키는 아래처럼 모든 요청에 쿠키 정보를 자동으로 포함한다.
+```
+GET /welcome HTTP/1.1
+Coocke: user=홍길동
+```
+```
+GET /board HTTP/1.1
+Cookie: user=홍길동
+```
+```
+GET /order HTTP/1.1
+Cookie: user=홍길동
+```
+
+- ex) set-cookie: **sessionId=abcde1234; expires**: Sat, 26-Dec-2020 00:00:00 GMT; **path**=/; **domain**:.google.com; **Secure**
+  - expires: 쿠키 만료 시간
+  - path: 쿠키 허용 경로
+  - domain: 쿠키 허용 도메인
+  - Secure: 쿠키 보안 정보
+- 사용처
+  - 사용자 로그인 세션 관리
+    - `user=홍길동` 보단 세션 키를 서버 DB에 저장 후 해당 세션 키를 쿠키로 반환하는게 안전
+  - 광고 정보 트래킹
+- 쿠키 정보는 항상 서버에 전송됨
+  - 네트워크 트래픽 추가 유발
+  - 최소한의 정보만 사용(세션 ID, 인증 토큰)
+  - 서버에 전송하지 않고 웹 브라우저 내부에 데이터를 저장하고 싶으면 웹 스토리지(Local Storage, Session Storage) 참고
+- 주의!
+  - 보안에 민감한 데이터는 저장하면 안됨(주민번호, 신용카드 번호 등)
+
+## 쿠키 - 생명주기
+
+### Expires, max-age
+
+- Set-Cookie: **expires**=Set, 26-Dec-2020 04:39:21 GMT
+  - 만료일이 되면 쿠키 삭제
+- Set-Cookie: **max-age**=3600 (3600초)
+  - 0이나 음수를 지정하면 쿠키 삭제
+
+- 세션 쿠키: 만료 날짜를 생략하면 브라우저 종료 시까지만 유지
+- 영속 쿠키: 만료 날짜를 입력하면 해당 날짜까지 유지
+
+## 쿠키 - 도메인
+
+### Domain
+
+- ex) domain=example.org
+- **명시: 멍시한 문서 기준 도메인 + 서브 도메인 포함**
+  - domain=example.org를 지정해서 쿠키 생성
+    - example.org는 물론이고 dev.example.org도 쿠키 접근
+
+- **생략: 현재 문서 기준 도메인만 적용**
+  - example.org에서 쿠키를 생성하고 domain 지정을 생략
+    - example.org에서만 쿠키 접근 가능
+    - dev.example.org에서는 쿠키 미접근
