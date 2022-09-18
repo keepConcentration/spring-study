@@ -210,3 +210,18 @@ Content-Length: 34012
 - **조건부 요청 헤더**
   - If-Match, If-None-Match: ETag 값 사용
   - If-Modified-Since, If-Unmodified-Since: Last-Modified값 사용
+
+# 프록시 캐시
+
+## Cache-Control
+
+### 캐시 지시어(directives) - 기타
+
+- **Cache-Control: public**
+  - 응답이 public 캐시에 저장되어도 됨
+- **Cache-Control: private**
+  - 응답이 해당 사용자만을 위한 것임, private 캐시에 저장해야함(기본값)
+- **Cache-Control: s-mexage**
+  - 프록시 캐시에만 적용되는 max-age
+- age: 60 (HTTP 헤더)
+  - 원 서버에서 응답 후 프록시 캐시 내에 머문 시간(초)
