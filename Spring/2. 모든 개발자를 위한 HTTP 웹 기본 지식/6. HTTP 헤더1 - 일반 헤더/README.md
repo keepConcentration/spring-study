@@ -475,3 +475,32 @@ Cookie: user=홍길동
   - example.org에서 쿠키를 생성하고 domain 지정을 생략
     - example.org에서만 쿠키 접근 가능
     - dev.example.org에서는 쿠키 미접근
+
+## 쿠키 - 경로
+
+### Path
+
+- ex) path=/home
+- **이 경로를 포함한 하위 경로로 페이지만 쿠키 접근**
+- **일반적으로 path=/ 루트로 지정**
+- ex)
+  - **path=/home 지정**
+  - /home -> 가능
+  - /home/level1 -> 가능
+  - /home/level1/level2 -> 가능
+  - /hello -> 불가능
+
+## 쿠키 - 보안
+
+### Secure, HttpOnly, SameSite
+
+- Secure
+  - 원래 쿠키는 http, https를 구분하지 않고 전송하지만 Secure를 적용하면 https인 경우에만 쿠키를 전송한다.
+- HttpOnly
+  - XSS 공격 방지
+  - 자바스크립트에서 접근 불가(document.cookie)
+  - HTTP 전송에만 사용
+- SameSite
+  - XSRF 공격 방지
+  - 요청 도메인과 쿠키에 설정한 도메인이 같은 경우만 쿠키 전송
+  - 브라우저에서 어느정도까지 지원하는지 확인 후 사용 요
