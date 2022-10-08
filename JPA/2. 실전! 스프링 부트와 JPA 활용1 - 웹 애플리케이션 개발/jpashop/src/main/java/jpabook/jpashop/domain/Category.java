@@ -25,7 +25,7 @@ public class Category {
     @JoinTable(name = "category_item",
             joinColumns = @JoinColumn(name = "category_id"),    // 중간 테이블에 있는 category_id
             inverseJoinColumns = @JoinColumn(name = "item_id")  // category_item 테이블에서 item으로 들어가는 컬럼 매핑
-    )
+     )
     private List<Item> items = new ArrayList<>();
 
     // 셀프 양방향 괸계
@@ -35,4 +35,9 @@ public class Category {
 
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
+
+    public void addChildCategory(Category child) {
+        this.child.add(child);
+        child.setParent(this);
+    }
 }
