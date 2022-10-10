@@ -29,7 +29,7 @@ public class Category {
     private List<Item> items = new ArrayList<>();
 
     // 셀프 양방향 괸계
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
@@ -40,4 +40,5 @@ public class Category {
         this.child.add(child);
         child.setParent(this);
     }
+
 }
