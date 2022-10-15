@@ -20,6 +20,8 @@ public class MemberRepository {
     // @PersistenceContext
     private final EntityManager em;
 
+    // generatedValue를 사용 시 persist를 한다해서 db에 바로 insert하지 않음
+    // commit으로 flush될 때 insert함
     public void save(Member member) {
         em.persist(member);
     }

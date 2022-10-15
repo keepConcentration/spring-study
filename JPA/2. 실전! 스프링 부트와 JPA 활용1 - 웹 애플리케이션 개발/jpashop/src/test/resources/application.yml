@@ -1,0 +1,19 @@
+spring:
+#  datasource:
+#    url: jdbc:h2:mem:test  # h2database가 있으면 메모리모드로 jvm안에서 db서버 실행 가능
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop  # create: 엔티티 drop 후 create create-drop: 애플리케이션 종료 시 drop
+#    properties:
+#      hibernate:
+#        show_sql: true   # sysout으로 출력
+#        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug  # logger 를 통해 출력
+    org.hibernate.type: trace
