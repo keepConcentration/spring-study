@@ -37,6 +37,7 @@ public class OrderItem {
         orderItem.setOrderPrice(orderPrice);
         orderItem.setCount(count);
         item.removeStock(count);
+        orderItem.setItem(item);
         return orderItem;
     }
 

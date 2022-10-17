@@ -89,7 +89,9 @@ public class Order {
 
         this.setStatus(OrderStatus.CANCEL);
 
-        orderItems.forEach(OrderItem::cancel);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
     }
 
 
