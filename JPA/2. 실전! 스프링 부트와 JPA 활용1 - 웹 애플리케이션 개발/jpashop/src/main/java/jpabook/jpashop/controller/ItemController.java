@@ -64,6 +64,7 @@ public class ItemController {
 
     @PostMapping("items/{itemId}/edit")
     public String updateItem(@PathVariable("itemId") String itemId, @ModelAttribute("form") BookForm form) {
+        // 저장된 후 불러온 객체, 준영속 엔티티, 준영속 엔티티는 JPA가 관리하지 않음(변경감지를 하지 않음.)
         Book book = new Book();
         book.setId(form.getId());
         book.setName(form.getName());
