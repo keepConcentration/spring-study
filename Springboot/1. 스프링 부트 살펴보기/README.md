@@ -18,8 +18,42 @@
 
 - 2012년 스프링 프레임워크 프로젝트에 이슈로 등록된
 ["Containerless 웹 개발 아키텍쳐의 지원"](https://github.com/spring-projects/spring-framework/issues/14521) 요청에서 논의와 개발 시작
+  - Servlet Container를 실행, 관리하기위해 개발자가 학습하고 적용하는 수고를 덜었으면 좋겠다는 내용.
 - [2013년 0.5.0.M1 공개](https://spring.io/blog/2013/08/06/spring-boot-simplifying-spring-for-everyone)
 - [2014년 1.0 GA 공개](https://spring.io/blog/2014/04/01/spring-boot-1-0-ga-released)
 - [2018년 2.0 GA 공개](https://spring.io/blog/2018/03/01/spring-boot-2-0-goes-ga)
 - [2022년 2.7.5 공개](https://spring.io/blog/2022/10/20/spring-boot-2-7-5-available-now)
 
+## Containerless
+
+- Servlet Container를 사용하지 않는다는 뜻이 아님.
+- web.xml, war, deploy, config, classloader, logging 등의
+Servlet Container 관련 작업에 대해 알 필요 없이 Spring Container 하나에 충실해도 애플리케이션을 실행할 수 있음
+
+## Opinionated
+
+개발자는 고민하지 말고 일단 고객에게 가치를 주기 해서 필요로 하는 소프트웨어 도메인 기능 개발에 충실하란 뜻
+
+### 스프링 프레임워크의 설계 철학
+- 극단적인 유연함 추구
+- 다양한 관점을 수용
+- Not opinionated
+- 수많은 선택지를 다 포용
+
+### 스프링 부트의 설계 철학
+
+- Opinionated - 자기 주장이 강한, 자기 의견을 고집하는, 독선적인
+- 일단 정해주는 대로 빠르게 개발하고 고민은 나중에
+- 스프링을 잘 활용하는 뛰어난 방법을 제공
+
+### 사용 기술과 의존 라이브러리 결정
+
+- 업계에서 검증된 스프링 생태계 프로젝트, 표준 자바 기술, 오픈 소스 기술의 종류와 의존관계,
+사용 버전을 정해줌
+- 각 기술을 스프링에 적용하는 방식(DI 구성)과 디플트 설정값 제공
+
+### 유연한 확장
+
+- 스프링 부트에 내장된 디폴트 구성을 커스터마이징하는 매우 자연스럽고 유연한 방법을 제공
+- 스프링 부트가 스프링을 사용하는 방식을 이해한다면 언제라도 스프링 부트를 제거하고 원하는 방식으로 재구성 가능
+- 스프링 부트처럼 기술과 구성을 간편하게 제공하는 나만의 모듈 작성
