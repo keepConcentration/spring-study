@@ -9,11 +9,14 @@ import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -23,12 +26,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+@Configuration  // 스프링 컨테이너가 해당 클래스가 팩토리 메서드를 가진 클래스인 것을 인지하기 위해
 public class HellobootApplication {
+
+    // 팩토리 메서드
+    @Bean
+    public HelloController helloController(HelloService helloService) {
+        return new HelloController(helloService);
+    }
+
+    // 팩토리 메서드
+    @Bean
+    public HelloService helloService() {
+        return new SimpleHelloService();
+    }
 
     public static void main(String[] args) {
 
         // 스프링 컨테이너
-        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext() {
+        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext() {
             // 스프링 컨테이너 초기화 후 서블릿 컨테이너 초기화 작업을 스프링 컨테이너 초기화 시 서블릿 컨테이너도 함께 초기화하는 작업을 위해
             // onRefresh()를 재정의함.
             @Override
@@ -48,11 +65,15 @@ public class HellobootApplication {
                                 new DispatcherServlet(this)
                         ).addMapping("/*"));
                 webServer.start();
-
             }
         };
-        applicationContext.registerBean(HelloController.class);
-        applicationContext.registerBean(SimpleHelloService.class);
+
+        // AnnotationConfigWebApplicationContext 에서 사용됨
+        applicationContext.register(HellobootApplication.class);
+
+        // GenericWebApplicationContext 에서 사용됨.
+        // applicationContext.registerBean(HelloController.class);
+        // applicationContext.registerBean(SimpleHelloService.class);
         applicationContext.refresh();  // 구성정보를 이용해 컨테이너 초기화
 
         // 서블릿컨테이너 실행 (임베디드 톰캣)
