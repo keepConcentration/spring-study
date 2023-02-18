@@ -8,6 +8,8 @@ import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFa
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,12 @@ import java.io.IOException;
 public class HellobootApplication {
 
     public static void main(String[] args) {
+
+        // 스프링 컨테이너
+        GenericApplicationContext applicationContext = new GenericApplicationContext();
+        applicationContext.registerBean(HelloController.class);
+        applicationContext.refresh();  // 구성정보를 이용해 컨테이너 초기화
+
         // 서블릿컨테이너 실행 (임베디드 톰캣)
         // new Tomcat().start();
 
@@ -32,25 +40,20 @@ public class HellobootApplication {
 
         // ServletContextInitializer 에 위 서블릿 등록, 위 서블릿은 /hello URL 요청을 처리한다.
         WebServer webServer = serverFactory.getWebServer(servletContext ->
-                servletContext.addServlet("frontcontroller", new HttpServlet() {
-                    HelloController helloController = new HelloController();
 
-					// 요청을 수행할 서블릿
+                // 요청을 수행할 서블릿
+                servletContext.addServlet("frontcontroller", new HttpServlet() {
                     @Override
                     protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
                         // 인증, 보안, 다국어, 공통 기능 처리 서블릿
-
-                        // GET /hello
                         if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
                             String name = req.getParameter("name");
 
+                            HelloController helloController = applicationContext.getBean(HelloController.class);
                             String ret = helloController.hello(name);
 
-                            res.setStatus(HttpStatus.OK.value());
-                            res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+                            res.setContentType(MediaType.TEXT_PLAIN_VALUE);
                             res.getWriter().println(ret);
-
-                        } else if (req.getRequestURI().equals("/user")) {
 
                         } else {
                             res.setStatus(HttpStatus.NOT_FOUND.value());
