@@ -46,6 +46,10 @@ public class HellobootApplication {
                         // DispatcherServlet은 "Web"ApplicationContext를 파라미터로 넣어줘야한다.
                         // 각 URL, Method에 대해 처리할 서블릿에 대한 힌트가 없어 어떤 요청이라도 404.
                         // 해결 방법은 해당 URL, Method 요청을 처리할 컨트롤러에 매핑정보를 입력.
+                        // @RequestMapping, @GetMapping과 같은 URL 매핑 정보를 사용해서 웹 요청을 위임함.
+                        // Controller가 String을 리턴하면 View로 인식함.
+                        // String을 웹 응답 Body에 넣기 위해선 @ResponseBody를 사용.
+                        // @RestController를 사용하면 클래스 아래 메소드에 모두 @ResponseBody를 붙임
                         new DispatcherServlet(applicationContext)
                 ).addMapping("/*"));
         webServer.start();
