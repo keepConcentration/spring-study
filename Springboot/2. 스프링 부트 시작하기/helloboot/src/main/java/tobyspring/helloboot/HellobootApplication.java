@@ -28,6 +28,7 @@ public class HellobootApplication {
         // 스프링 컨테이너
         GenericApplicationContext applicationContext = new GenericApplicationContext();
         applicationContext.registerBean(HelloController.class);
+        applicationContext.registerBean(SimpleHelloService.class);
         applicationContext.refresh();  // 구성정보를 이용해 컨테이너 초기화
 
         // 서블릿컨테이너 실행 (임베디드 톰캣)
