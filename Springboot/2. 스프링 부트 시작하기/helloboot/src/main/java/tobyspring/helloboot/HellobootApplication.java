@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.support.GenericWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +28,7 @@ public class HellobootApplication {
     public static void main(String[] args) {
 
         // 스프링 컨테이너
-        GenericApplicationContext applicationContext = new GenericApplicationContext();
+        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext();
         applicationContext.registerBean(HelloController.class);
         applicationContext.registerBean(SimpleHelloService.class);
         applicationContext.refresh();  // 구성정보를 이용해 컨테이너 초기화
@@ -39,30 +41,39 @@ public class HellobootApplication {
         // ServletWebServerFactory serverFactory = new JettyServletWebServerFactory();
         // ServletWebServerFactory serverFactory = new UndertowServletWebServerFactory();
 
-        // ServletContextInitializer 에 위 서블릿 등록, 위 서블릿은 /hello URL 요청을 처리한다.
         WebServer webServer = serverFactory.getWebServer(servletContext ->
-
-                // 요청을 수행할 서블릿
-                servletContext.addServlet("frontcontroller", new HttpServlet() {
-                    @Override
-                    protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                        // 인증, 보안, 다국어, 공통 기능 처리 서블릿
-                        if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
-                            String name = req.getParameter("name");
-
-                            HelloController helloController = applicationContext.getBean(HelloController.class);
-                            String ret = helloController.hello(name);
-
-                            res.setContentType(MediaType.TEXT_PLAIN_VALUE);
-                            res.getWriter().println(ret);
-
-                        } else {
-                            res.setStatus(HttpStatus.NOT_FOUND.value());
-                        }
-                    }
-                }).addMapping("/*"));
-        // 요청: http -v ":8080/hello?name=Spring"
+                servletContext.addServlet("frontcontroller",
+                        // DispatcherServlet은 "Web"ApplicationContext를 파라미터로 넣어줘야한다.
+                        // 각 URL, Method에 대해 처리할 서블릿에 대한 힌트가 없어 어떤 요청이라도 404.
+                        // 해결 방법은 해당 URL, Method 요청을 처리할 컨트롤러에 매핑정보를 입력.
+                        new DispatcherServlet(applicationContext)
+                ).addMapping("/*"));
         webServer.start();
+
+
+        /*
+        // 요청을 수행할 서블릿
+        // 요청: http -v ":8080/hello?name=Spring"
+        // ServletContextInitializer 에 아래 서블릿 등록, 아래 서블릿은 /hello URL 요청을 처리한다.
+        new HttpServlet() {
+            @Override
+            protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
+                // 인증, 보안, 다국어, 공통 기능 처리 서블릿
+                if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
+                    String name = req.getParameter("name");
+
+                    HelloController helloController = applicationContext.getBean(HelloController.class);
+                    String ret = helloController.hello(name);
+
+                    res.setContentType(MediaType.TEXT_PLAIN_VALUE);
+                    res.getWriter().println(ret);
+
+                } else {
+                    res.setStatus(HttpStatus.NOT_FOUND.value());
+                }
+            }
+        };
+         */
     }
 
 }
