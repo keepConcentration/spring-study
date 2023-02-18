@@ -33,6 +33,8 @@ public class HellobootApplication {
         // ServletContextInitializer 에 위 서블릿 등록, 위 서블릿은 /hello URL 요청을 처리한다.
         WebServer webServer = serverFactory.getWebServer(servletContext ->
                 servletContext.addServlet("frontcontroller", new HttpServlet() {
+                    HelloController helloController = new HelloController();
+
 					// 요청을 수행할 서블릿
                     @Override
                     protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -42,9 +44,12 @@ public class HellobootApplication {
                         if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
                             String name = req.getParameter("name");
 
+                            String ret = helloController.hello(name);
+
                             res.setStatus(HttpStatus.OK.value());
                             res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-                            res.getWriter().println("Hello " + name);
+                            res.getWriter().println(ret);
+
                         } else if (req.getRequestURI().equals("/user")) {
 
                         } else {
