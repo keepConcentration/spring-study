@@ -9,6 +9,7 @@ import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -24,24 +25,33 @@ public class HellobootApplication {
         // 서블릿컨테이너 실행 (임베디드 톰캣)
         // new Tomcat().start();
 
-        // 톰캣 외의 제티, 토우같은 다른 서블릿 컨테이너를 지원하기 위해 추상화된 인터페이스
+        // ServletWebServerFactory: 톰캣 외의 제티, 토우같은 다른 서블릿 컨테이너를 지원하기 위해 추상화된 인터페이스
         ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
         // ServletWebServerFactory serverFactory = new JettyServletWebServerFactory();
         // ServletWebServerFactory serverFactory = new UndertowServletWebServerFactory();
 
         // ServletContextInitializer 에 위 서블릿 등록, 위 서블릿은 /hello URL 요청을 처리한다.
         WebServer webServer = serverFactory.getWebServer(servletContext ->
-                servletContext.addServlet("hello", new HttpServlet() {
+                servletContext.addServlet("frontcontroller", new HttpServlet() {
 					// 요청을 수행할 서블릿
                     @Override
                     protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                        String name = req.getParameter("name");
+                        // 인증, 보안, 다국어, 공통 기능 처리 서블릿
 
-                        res.setStatus(HttpStatus.OK.value());
-                        res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-                        res.getWriter().println("Hello " + name);
+                        // GET /hello
+                        if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
+                            String name = req.getParameter("name");
+
+                            res.setStatus(HttpStatus.OK.value());
+                            res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+                            res.getWriter().println("Hello " + name);
+                        } else if (req.getRequestURI().equals("/user")) {
+
+                        } else {
+                            res.setStatus(HttpStatus.NOT_FOUND.value());
+                        }
                     }
-                }).addMapping("/hello"));
+                }).addMapping("/*"));
         // 요청: http -v ":8080/hello?name=Spring"
         webServer.start();
     }
