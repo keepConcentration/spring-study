@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
@@ -27,9 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@Configuration  // 스프링 컨테이너가 해당 클래스가 팩토리 메서드를 가진 클래스인 것을 인지하기 위해
+// 스프링 컨테이너가 해당 클래스가 팩토리 메서드를 가진 클래스인 것을 인지하기 위해
+@Configuration
+@ComponentScan // 해당 클래스의 패키지, 하위 패키지에 @Component가 붙은 클래스를 빈으로 등록함
 public class HellobootApplication {
 
+    /*
     // 팩토리 메서드
     @Bean
     public HelloController helloController(HelloService helloService) {
@@ -40,7 +44,7 @@ public class HellobootApplication {
     @Bean
     public HelloService helloService() {
         return new SimpleHelloService();
-    }
+    }*/
 
     public static void main(String[] args) {
 
