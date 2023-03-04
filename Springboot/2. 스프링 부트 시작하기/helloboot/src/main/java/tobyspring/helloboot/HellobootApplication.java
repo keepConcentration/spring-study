@@ -31,23 +31,10 @@ import java.io.IOException;
 
 
 // 스프링 컨테이너가 해당 클래스가 팩토리 메서드를 가진 클래스인 것을 인지하기 위해
-@Configuration
-@ComponentScan // 해당 클래스의 패키지, 하위 패키지에 @Component가 붙은 클래스를 빈으로 등록함
+@MySpringBootAnnotation
 public class HellobootApplication {
-    @Bean
-    public ServletWebServerFactory servletWebServerFactory() {
-        return new TomcatServletWebServerFactory();
-    }
-
-    @Bean
-    public DispatcherServlet dispatcherServlet() {
-        return new DispatcherServlet();
-    }
-
     public static void main(String[] args) {
         //MySpringApplication.run(HellobootApplication.class, args);
         SpringApplication.run(HellobootApplication.class, args);
     }
-
-
 }
