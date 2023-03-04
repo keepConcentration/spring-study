@@ -1,7 +1,11 @@
-package tobyspring.helloboot;
+package tobyspring.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import tobyspring.config.EnableMyAutoConfiguration;
+import tobyspring.config.autoconfig.DispatcherServletConfig;
+import tobyspring.config.autoconfig.TomcatWebServerConfig;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,5 +16,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)   // class, interface, enum
 @Configuration
 @ComponentScan // 해당 클래스의 패키지, 하위 패키지에 @Component가 붙은 클래스를 빈으로 등록함
-public @interface MySpringBootAnnotation {
+@EnableMyAutoConfiguration
+public @interface MySpringBootApplication {
 }
