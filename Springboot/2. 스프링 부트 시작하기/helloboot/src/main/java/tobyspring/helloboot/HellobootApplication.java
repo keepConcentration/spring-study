@@ -8,6 +8,7 @@ import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFa
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.cglib.proxy.Dispatcher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -46,6 +47,16 @@ public class HellobootApplication {
         return new SimpleHelloService();
     }*/
 
+    @Bean
+    public ServletWebServerFactory servletWebServerFactory() {
+        return new TomcatServletWebServerFactory();
+    }
+
+    @Bean
+    public DispatcherServlet dispatcherServlet() {
+        return new DispatcherServlet();
+    }
+
     public static void main(String[] args) {
 
         // 스프링 컨테이너
@@ -56,9 +67,13 @@ public class HellobootApplication {
             protected void onRefresh() {
                 super.onRefresh();
 
-                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+                // dispatcherServlet.setApplicationContext(this);
+
+
                 WebServer webServer = serverFactory.getWebServer(servletContext ->
-                        servletContext.addServlet("frontcontroller",
+                        servletContext.addServlet("dispatcherServlet",
                                 // DispatcherServlet은 "Web"ApplicationContext를 파라미터로 넣어줘야한다.
                                 // 각 URL, Method에 대해 처리할 서블릿에 대한 힌트가 없어 어떤 요청이라도 404.
                                 // 해결 방법은 해당 URL, Method 요청을 처리할 컨트롤러에 매핑정보를 입력.
@@ -66,7 +81,7 @@ public class HellobootApplication {
                                 // Controller가 String을 리턴하면 View로 인식함.
                                 // String을 웹 응답 Body에 넣기 위해선 @ResponseBody를 사용.
                                 // @RestController를 사용하면 클래스 아래 메소드에 모두 @ResponseBody를 붙임
-                                new DispatcherServlet(this)
+                                dispatcherServlet
                         ).addMapping("/*"));
                 webServer.start();
             }
